@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bubble background color -->
     <solid android:color="@color/other_msg_bg" />
 
-    <stroke android:width="1dp" android:color="@color/other_msg_bg"/>
+    <!-- Professional thick border as shown in the image -->
+    <stroke
+        android:width="2.5dp"
+        android:color="@color/black" />
 
-    <corners android:radius="16dp" />
+    <!-- Smooth rounded corners -->
+    <corners android:radius="14dp" />
 
-    <padding android:left="12dp" android:top="8dp" android:right="12dp" android:bottom="8dp"/>
+    <!-- Internal padding for the text -->
+    <padding
+        android:left="16dp"
+        android:top="8dp"
+        android:right="16dp"
+        android:bottom="10dp"/>
 </shape>

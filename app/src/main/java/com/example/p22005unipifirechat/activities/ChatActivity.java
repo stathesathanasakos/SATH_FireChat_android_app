@@ -273,7 +273,7 @@ public class ChatActivity extends BaseActivity {
 
         if (messageAdapter == null) {
             //messageAdapter returns the messages to the recyclerView
-            messageAdapter = new MessageAdapter(ChatActivity.this, mChat, imageUrl, new IMessageActionListener() {
+            messageAdapter = new MessageAdapter(ChatActivity.this, mChat, imageUrl, otherUsername, new IMessageActionListener() {
                 @Override
                 public void onMessageLongClick(Message message) {
                     if (message.senderId.equals(currentUserId)) {

@@ -1,6 +1,7 @@
 package com.example.p22005unipifirechat.utils;
 
 import com.example.p22005unipifirechat.BuildConfig;
+import com.example.p22005unipifirechat.R;
 import com.example.p22005unipifirechat.interfaces.SmartReplyListener;
 import com.example.p22005unipifirechat.interfaces.SmartSummaryListener;
 import com.example.p22005unipifirechat.modelclasses.Message;
@@ -41,7 +42,7 @@ public class AiManager {
 
 
 
-    //set the prompt to generate smart replies and the summary
+    //set the prompt to generate smart replies
     public void generateSmartReplies(List<Message> chatHistory, String currentUserId, SmartReplyListener listener) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("You are the user 'Me' in a chat conversation. Read the following recent messages:\n\n");
@@ -80,7 +81,7 @@ public class AiManager {
                     }
                     listener.onRepliesGenerated(repliesList);
                 } else {
-                    listener.onError(" ");
+                    listener.onError("" + R.string.smart_reply_error);
                 }
             }
 
@@ -95,7 +96,7 @@ public class AiManager {
 
 
 
-    //summarize
+    //smart summary method
     public void generateSummary(List<Message> chatHistory, String currentUserId, SmartSummaryListener listener) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("You are an objective assistant. Your task is to summarize the following chat conversation:\n\n");
@@ -125,7 +126,7 @@ public class AiManager {
                 if (aiText != null && !aiText.isEmpty()) {
                     listener.onSummaryGenerated(aiText.trim());
                 } else {
-                    listener.onError("Δεν ήταν δυνατή η δημιουργία περίληψης.");
+                    listener.onError("" + R.string.summary_error);
                 }
             }
 

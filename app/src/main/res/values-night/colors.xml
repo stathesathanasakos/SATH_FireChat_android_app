@@ -10,10 +10,10 @@
     <color name="secondary_text">#B0B0B0</color>
     <color name="delete_icon_tint">#FF5252</color>
     <color name="icon_secondary">#757575</color>
-
+    <color name="others_username_in_bubble">#121212</color>
     <color name="chat_bar_bg">#1E1E1E</color>
     <color name="card_surface">#1E1E1E</color>
-
+    <color name="others_text">#FFFFFF</color>
     <color name="input_bg">#1E1E1E</color>
     <color name="input_stroke_default">#333333</color>
     <color name="input_stroke_focused">#B71C1C</color>

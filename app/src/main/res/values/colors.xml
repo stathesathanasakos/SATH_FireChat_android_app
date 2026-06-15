@@ -18,10 +18,10 @@
     <color name="secondary_text">#757575</color>
     <color name="delete_icon_tint">#D32F2F</color>
     <color name="icon_secondary">#BDBDBD</color>
-
+    <color name="others_username_in_bubble">@color/my_primary</color>
     <color name="chat_bar_bg">#FFFFFF</color>
     <color name="card_surface">#FFFFFF</color>
-
+    <color name="others_text">#FF000000</color>
     <color name="input_bg">#FFFFFF</color>
     <color name="input_stroke_default">#D0D5DD</color>
     <color name="input_stroke_focused">#4F46E5</color>

@@ -4,36 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="4dp"
-    android:gravity="center_vertical">
+    android:padding="6dp"
+    android:gravity="bottom">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardAvatarLeft"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/other_msg_bg">
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgChatAvatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="6dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/simpleuser"
+        app:shapeAppearanceOverlay="@style/CircleImageView" />
 
-        <ImageView
-            android:id="@+id/imgChatAvatar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="6dp"
-            android:src="@android:drawable/sym_def_app_icon" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/tvMessage"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:maxWidth="280dp"
-
         android:background="@drawable/bg_message_left"
-        android:textColor="@color/other_text_color"
+        android:orientation="vertical"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp"
+        android:minWidth="180dp">
 
-        android:text="Hello back"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvMessageUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/others_username_in_bubble"
+            android:textAllCaps="true"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/others_text"
+            android:textStyle="bold"
+            android:maxWidth="250dp"
+            android:textSize="17sp" />
+    </LinearLayout>
 </LinearLayout>
