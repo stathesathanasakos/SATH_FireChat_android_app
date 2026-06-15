@@ -1,42 +1,79 @@
 # SATH FireChat
-### A Professional Real-time Android Messaging System
 
-**SATH FireChat** is a robust, high-performance Android application built to demonstrate modern mobile development practices. It provides a seamless real-time communication experience, leveraging **Firebase** for backend services and a meticulously decoupled architecture to ensure scalability and maintainability.
+**SATH FireChat** is a native Android application built to demonstrate modern mobile development practices. It provides a seamless real-time communication experience, using **Firebase** for backend services and Clean architecture to ensure scalability and maintainability.
 
 ---
 
-## Core Features
+## Features
 
-- **Real-time Messaging**: Instant data synchronization across devices using Firebase Realtime Database.
-- **Secure Authentication**: Integrated dual-auth system supporting standard **Email/Password** credentials and **Google Sign-In**.
-- **Clean UI/UX**: Professional Material Design 3 interface with full **Edge-to-Edge** support and immersive system bar integration.
-- **Dynamic Theming**: Full support for **Dark Mode**, Light Mode, and System Default synchronization.
-- **Global Localization**: Instant runtime language switching between **English** and **Greek** without application restart.
-- **Account Management**: Comprehensive profile customization including avatar selection and secure account deletion protocols.
+- Real-time Messaging: Your messages sync everywhere at once. Send a text on one device and see it appear instantly on other's device
+- Authentication: Integrated dual-auth system. Jump right in using your Google account or a simple email and password
+- Dynamic Theming: Full support for Dark Mode, Light Mode and System Default synchronization
+- Global Localization: Instant runtime language switching between English and Greek without application restart
+- Profile/Account Management: Personalize your profile by picking an avatar and manage your data with secure account deletion options
+- Smart AI Features: Save time with AI-powered "smart replies" and get quick summaries of your long chats so you’re always up to speed
 
 ---
 
 ## Architecture Deep Dive
 
-The project follows **Clean Architecture** principles, prioritizing the **Single Responsibility Principle (SOLID)**. The logic is divided into distinct layers to avoid "God Activities" and ensure high maintainability:
+The project follows **Clean Architecture** principles, prioritizing the **Single Responsibility Principle (SOLID)**. The logic is divided into distinct layers to avoid "God Activities" and give high maintainability:
 
 ### 1. UI Layer (View)
-Activities (e.g., `ChatActivity`, `ProfileActivity`) are strictly responsible for rendering data and capturing user input. They extend a `BaseActivity` which handles global configuration like locale and theme application.
+Activities (e.g., `ChatActivity`, `ProfileActivity`) are responsible only for rendering data and capturing user input. They extend the `BaseActivity` which handles global configuration like locale and theme application.
 
 ### 2. Logic Layer (Managers)
-Singleton Managers (e.g., `AuthManager`, `ChatManager`, `ThemeManager`) act as the "brain" of the app. They handle business logic, data validation, and state management, communicating results back to the UI via dedicated **Interfaces**.
+Singleton Managers (e.g., `AuthManager`, `ChatManager`, `ThemeManager`) act as the brain of the app. With them I handle business logic, data validation, and state management, communicating results back to the UI via proper **Interfaces**.
 
 ### 3. Data Layer (Firebase)
 Firebase serves as the single source of truth. The app utilizes:
-- **Authentication**: To manage user sessions securely.
-- **Realtime Database**: For a reactive, NoSQL approach to storing messages and user metadata.
+- **Authentication**: To manage user sessions securely
+- **Realtime Database**: For a reactive, NoSQL approach to storing messages and user metadata
+
+---
+## Database Architecture
+
+### Architecture
+I used a NoSQL solution (Realtime Database). I created three distinct, specialized nodes:
+- users: Stores essential metadata keyed strictly under a unique User ID (UID)
+- Chats: Holds individual message payloads with millisecond timestamps for instantaneous chronological ordering
+- ChatList: It is something like a lightweight index for each user's active conversations
+
+In a standard database (like SQL), if I wanted to show the chat history on the main screen, the app would have to search through thousands of users and messages every single time. As more users join the app, this would make the app slow, uses too much internet data, and can even cause crashes. So, I decided to use the Realtime Database and split it into three independent nodes, with no database relations (flat structure).
+
+
+### Safety Rules
+To keep user data safe without breaking the real-time updates, I added security rules directly to the database:
+```json
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "Chats": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "ChatList": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
+```
+That way I ensure that:
+- Only authenticated users (auth != null) can read chat message paths or search for other users. Anonymous external API calls are blocked.
+- A user can only write or update data inside the users/$uid node if their current authenticated session token perfectly matches that specific node's ID. This prevents unauthorized users from modifying other people's profiles.
 
 ---
 
 ## Key Code Explanations
 
 ### Decoupled Logic Pattern
-Instead of calling Firebase directly from the Activity, we use a Manager pattern with asynchronous callbacks. This makes the code unit-testable and the UI highly responsive.
+Instead of calling Firebase directly from the Activity, I use a Manager (logic layer) with asynchronous callbacks. This makes the code unit-testable and the UI highly responsive.
 
 ```java
 // Example of the clean communication pattern in ChatManager.java
@@ -55,10 +92,10 @@ public void sendMessage(String senderId, String receiverId, String messageText, 
 ```
 
 ### Global Configuration via BaseActivity
-To ensure that theme and language changes persist and apply immediately to every screen, we utilize a `BaseActivity` context wrapper.
+To ensure that theme and language changes persist and apply immediately to every screen, I utilize a `BaseActivity` context wrapper.
 
 ```java
-// BaseActivity handles the locale and theme for every inheriting screen
+// BaseActivity to handle the locale and theme for every inheriting screen
 @Override
 protected void attachBaseContext(Context newBase) {
     languageManager = new LanguageManager(newBase);
@@ -67,15 +104,29 @@ protected void attachBaseContext(Context newBase) {
 ```
 
 ---
-
 ## Tech Stack
 
 - **Language**: Java
-- **Backend**: Firebase (Auth, Realtime Database)
+- **Backend**: Firebase (Authentication, Realtime Database)
 - **Identity**: Google Sign-In SDK
 - **UI Framework**: Material Design 3 (Components), ConstraintLayout, Edge-to-Edge
 - **Jetpack Libraries**: Activity, Core
 - **Persistence**: SharedPreferences (Theme & Locale preference)
+
+---
+
+## Future Roadmap
+
+### 1. Data Privacy & Realtime Database Vulnerabilities
+- **The Problem (Insecure Open Access):** Currently, my database allows ANY logged-in user to read and write messages across the entire application. A malicious user could bypass the app's UI,via its URL, and read private conversations belonging to other people.
+- **The Solution (Dynamic Security Rules):** Τhe database rules must be updated to inspect each chat message. The system should only grant read/write access if the logged-in user's `UID` perfectly matches either the `senderId` or the `receiverId` of that specific message.
+
+### 2. Sensitive Data Encryption
+- **The Problem (Plaintext Messages):** Right now, all chat texts are stored inside Firebase as plain text. If someone gains unauthorized access to the Firebase Console, they can read every user's private conversations
+- **One possible Solution (AES-256 + Android Keystore System):** Maybe I can implement symmetric AES-256 encryption using the "Android Keystore System":
+  1. **Hardware-Backed Security:** Instead of hardcoding a static key, the key will be generated dynamically inside the device’s hardware-isolated storage (TEE/StrongBox) using a Password-Based Encryption (PBE) approach. The app will never expose the raw key in the code, will only ask the Keystore to encrypt and decrypt the payloads.
+  2. **Application Logic Integration:** I can create a `CryptoUtils.java` helper class. The `ChatManager.java` will encrypt the `messageText` string on the phone right before uploading it to the `Chats` node. Then, the `MessagesAdapter.java` will decrypt the string before rendering it on the chat screen.
+
 
 ---
 
@@ -99,4 +150,4 @@ protected void attachBaseContext(Context newBase) {
 
 ## Author
 **Efstathios Panagiotis Athanasakos**  
-*Computer Science Student at University of Piraeus*
+*Final-year BSc Computer Science student at the University of Piraeus*
