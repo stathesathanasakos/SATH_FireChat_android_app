@@ -8,6 +8,7 @@
     <string name="email_address">Διεύθυνση Email</string>
     <string name="password">Κωδικός πρόσβασης</string>
     <string name="sign_up">Εγγραφή</string>
+    <string name="who">Εγώ</string>
     <string name="already_have_an_account">Έχετε ήδη λογαριασμό; Συνδεθείτε</string>
     <string name="my_profile">Το Προφίλ μου</string>
     <string name="update_profile">Ενημέρωση Προφίλ</string>
@@ -15,7 +16,7 @@
     <string name="loadingword">Φόρτωση...</string>
     <string name="username1">Όνομα χρήστη</string>
     <string name="enter_username">Εισαγάγετε όνομα χρήστη</string>
-    <string name="tap_here_to_continue_the_conversation">Πατήστε εδώ για να συνεχίσετε τη συνομιλία</string>
+    <string name="tap_here_to_continue_the_conversation">Συνεχίσετε τη συνομιλία σας εδώ</string>
     <string name="choose_an_avatar">Επιλέξτε ένα Avatar</string>
     <string name="cannot_send_an_empty_message">Δεν είναι δυνατή η αποστολή κενού μηνύματος</string>
     <string name="user_not_found">Ο χρήστης δεν βρέθηκε!</string>
@@ -69,4 +70,12 @@
     <string name="theme_light">Λειτουργία ημέρας</string>
     <string name="theme_dark">Νυχτερινή λειτουργία</string>
     <string name="theme_system">Αυτόματα</string>
+    <string name="copy_message">Αντιγραφή</string>"
+    <string name="delete_message">Διαγραφή</string>
+    <string name="choices">Επιλογές:</string>
+    <string name="onCopyMessage">Έγινε αντιγραφή</string>
+    <string name="privates">Απόρρητα</string>"
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="favorites">Αγαπημένα</string>"
+    <string name="menu">Μενού</string>
 </resources>

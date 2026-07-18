@@ -55,7 +55,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             }
         });
 
-
+        /*
         holder.btnDeleteChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +64,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                 }
             }
         });
+        */
     }
 
 
@@ -87,7 +88,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             imgUserAvatar = itemView.findViewById(R.id.imgAvatar);
-            btnDeleteChat = itemView.findViewById(R.id.btnDeleteChat);
+            //btnDeleteChat = itemView.findViewById(R.id.btnDeleteChat);
         }
     }
 }

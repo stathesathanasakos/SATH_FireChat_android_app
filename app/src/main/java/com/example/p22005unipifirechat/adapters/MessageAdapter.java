@@ -15,8 +15,8 @@ import com.example.p22005unipifirechat.R;
 import com.example.p22005unipifirechat.utils.AvatarUtils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.List;
+import java.util.Locale;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
@@ -27,10 +27,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private List<Message> mChat;
     private String imageUrl;
     private String otherUsername;
-
-
     private IMessageActionListener listener;
-
     FirebaseUser fuser;
 
     public MessageAdapter(Context context, List<Message> mChat, String imageUrl, String otherUsername, IMessageActionListener listener){
@@ -60,14 +57,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         // Set username in the bubble
         if (getItemViewType(position) == MSG_TYPE_LEFT) {
-            holder.tvMessageUsername.setText(otherUsername);
+            holder.tvMessageUsername.setText(otherUsername.toLowerCase(Locale.ROOT));
             if (holder.imgChatAvatar != null) {
                 holder.imgChatAvatar.setVisibility(View.VISIBLE);
                 AvatarUtils.setAvatar(holder.imgChatAvatar, imageUrl);
             }
         } else {
             // For own messages
-            holder.tvMessageUsername.setText(context.getString(R.string.yes).equals("Ναι") ? "Εσείς" : "You");
+            holder.tvMessageUsername.setText(context.getString(R.string.yes).equals("Ναι") ? "Εγώ" : "Me");
         }
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {

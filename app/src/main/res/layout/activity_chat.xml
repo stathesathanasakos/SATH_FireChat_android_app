@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"
+        android:padding="3dp"
         android:scrollbars="vertical" />
 
     <!-- Navigation Bar adjustment container -->
@@ -132,6 +132,7 @@
                 android:textColor="@color/primary_text"
                 android:textColorHint="@color/primary_text"
                 android:background="@null"
+                android:textSize="16sp"
                 android:padding="12dp"
                 android:maxLines="3"
                 android:inputType="textMultiLine|textCapSentences" />
@@ -150,8 +151,9 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_send"
-                app:tint="#B71C1C" />
+                android:src="@drawable/ic_send_custom"
+                app:tint="#7F0000"
+                />
         </LinearLayout>
 
 

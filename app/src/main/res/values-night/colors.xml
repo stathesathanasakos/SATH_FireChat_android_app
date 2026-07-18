@@ -3,14 +3,13 @@
     <color name="brand_color">#800000</color>
     <color name="app_background">#121212</color>
     <color name="my_msg_bg">#800000</color>
-    <color name="other_msg_bg">#296B30</color>
+    <color name="other_msg_bg">#2D2D30</color>
     <color name="my_text_color">#FFFFFF</color>
     <color name="other_text_color">#E0E0E0</color>
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#B0B0B0</color>
-    <color name="delete_icon_tint">#FF5252</color>
     <color name="icon_secondary">#757575</color>
-    <color name="others_username_in_bubble">#121212</color>
+    <color name="others_username_in_bubble">#FF5252</color>
     <color name="chat_bar_bg">#1E1E1E</color>
     <color name="card_surface">#1E1E1E</color>
     <color name="others_text">#FFFFFF</color>

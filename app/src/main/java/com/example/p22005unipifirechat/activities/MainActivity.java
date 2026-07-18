@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,11 +44,9 @@ public class MainActivity extends BaseActivity {
     private RecyclerView recyclerViewChats;
     private FloatingActionButton fabNewChat;
     private TextView tvEmptyState;
-    private ImageButton btnLogout;
-
+    private View btnLogout;
     private UsersAdapter usersAdapter;
     private List<User> userList;
-
     private AuthManager authManager;
     private MainManager mainManager;
     private String currentUserId;
@@ -65,6 +66,18 @@ public class MainActivity extends BaseActivity {
     private String selectedChatUsername;
     // reference to the currently open dialog
     private AlertDialog activeDialog;
+
+    // sidebar elements
+    private DrawerLayout drawerLayout;
+    private View sidebarLayout;
+    private ImageButton btnSidebarBack;
+    private ImageButton btnMenu;
+    private TextView btnSidebarProfile;
+    private TextView btnSidebarPrivates;
+    private TextView btnSidebarFavorites;
+    private TextView btnSidebarSettings;
+
+
 
 
     @Override
@@ -120,6 +133,17 @@ public class MainActivity extends BaseActivity {
                 return insets;
             });
         }
+
+        //logout button in the sidebar should be placed above the device's navigation bar
+        View sidebar = findViewById(R.id.sidebarLayout); // Το βρίσκουμε απευθείας για να μην είναι null!
+        if (sidebar != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(sidebar, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                // Προσθέτουμε δυναμικό padding ΜΟΝΟ στο κάτω μέρος, ίσο με το navigation bar του εκάστοτε κινητού
+                v.setPadding(0, 0, 0, systemBars.bottom);
+                return insets;
+            });
+        }
     }
 
     private void initManagers() {
@@ -132,6 +156,23 @@ public class MainActivity extends BaseActivity {
         fabNewChat = findViewById(R.id.fabNewChat);
         tvEmptyState = findViewById(R.id.tvEmptyState);
         btnLogout = findViewById(R.id.btnLogout);
+
+        //sidebar elements initialization
+        drawerLayout = findViewById(R.id.drawerLayout);
+        sidebarLayout = findViewById(R.id.sidebarLayout);
+        btnSidebarBack = findViewById(R.id.btnSidebarBack);
+        btnMenu = findViewById(R.id.btnMenu);
+        btnSidebarProfile = findViewById(R.id.btnSidebarProfile);
+        btnSidebarPrivates = findViewById(R.id.btnSidebarPrivates);
+        btnSidebarFavorites = findViewById(R.id.btnSidebarFavorites);
+        btnSidebarSettings = findViewById(R.id.btnSidebarSettings);
+
+        // set the sidebar's width
+        sidebarLayout.post(() -> {
+            ViewGroup.LayoutParams params = sidebarLayout.getLayoutParams();
+            params.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.75);
+            sidebarLayout.setLayoutParams(params);
+        });
     }
 
     private void setupRecyclerView() {
@@ -155,8 +196,36 @@ public class MainActivity extends BaseActivity {
 
     private void setupClickListeners() {
         fabNewChat.setOnClickListener(v -> showNewChatDialog());
-        findViewById(R.id.btnProfile).setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
-        btnLogout.setOnClickListener(v -> showLogoutDialog());
+        //findViewById(R.id.btnProfile).setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        btnLogout.setOnClickListener(v -> {
+            //drawerLayout.closeDrawer(GravityCompat.START);
+            showLogoutDialog();
+        });
+
+        btnMenu.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
+
+        //sidebar elements click listeners
+        btnSidebarBack.setOnClickListener(v -> drawerLayout.closeDrawer(GravityCompat.START));
+
+        btnSidebarProfile.setOnClickListener(v -> {
+            startActivity(new Intent(this, ProfileActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        btnSidebarPrivates.setOnClickListener(v -> {
+            startActivity(new Intent(this, PrivatesActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        btnSidebarFavorites.setOnClickListener(v -> {
+            startActivity(new Intent(this, FavoritesActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        btnSidebarSettings.setOnClickListener(v -> {
+            startActivity(new Intent(this, SettingsActivity.class));
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
     }
 
 
@@ -353,6 +422,7 @@ public class MainActivity extends BaseActivity {
         intent.putExtra("other_username", username);
         startActivity(intent);
     }
+
 
 
 

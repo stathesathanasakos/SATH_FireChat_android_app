@@ -33,14 +33,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:ellipsize="end"
             android:maxLines="1"
             android:text="Username"
             android:textColor="@color/primary_text"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tvLastMessage"
-            app:layout_constraintEnd_toStartOf="@+id/btnDeleteChat"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
@@ -57,23 +55,10 @@
             android:maxLines="1"
             android:text="@string/tap_here_to_continue_the_conversation"
             android:textColor="@color/secondary_text"
-            android:textSize="14sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnDeleteChat"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
-
-        <ImageButton
-            android:id="@+id/btnDeleteChat"
-            android:layout_width="25dip"
-            android:layout_height="25dip"
-            android:scaleType="fitCenter"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_delete"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/icon_secondary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

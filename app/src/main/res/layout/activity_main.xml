@@ -1,124 +1,280 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    android:background="@color/app_background"
     tools:context=".activities.MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/brand_color"
-        android:fitsSystemWindows="true"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:contentInsetStart="0dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
-
-                <ImageButton
-                    android:id="@+id/btnProfile"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@android:drawable/ic_menu_preferences"
-                    app:tint="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvHeaderTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/btnLogout"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@android:drawable/ic_lock_power_off"
-                    app:tint="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewChats"
+    <!-- Το υπάρχον Main Content -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="88dp" />
+        android:fitsSystemWindows="false"
+        android:background="@color/app_background">
 
-    <LinearLayout
-        android:id="@+id/emptyStateLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="visible">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/brand_color"
+            android:fitsSystemWindows="true"
+            app:elevation="0dp">
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:alpha="0.1"
-            android:src="@android:drawable/ic_menu_send"
-            app:tint="@color/primary_text" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentInsetStart="0dp">
 
-        <TextView
-            android:id="@+id/tvEmptyState"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
+
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_menu_button"
+                        app:tint="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvHeaderTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.MaterialToolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewChats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:clipToPadding="false"
+            android:paddingTop="5dp"
+            android:paddingBottom="88dp" />
+
+        <LinearLayout
+            android:id="@+id/emptyStateLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/no_chats_yet"
-            android:textColor="@color/primary_text"
-            android:alpha="0.4"
-            android:textAlignment="center"
-            android:textSize="16sp" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:alpha="0.1"
+                android:src="@android:drawable/ic_menu_send"
+                app:tint="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/tvEmptyState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/no_chats_yet"
+                android:textColor="@color/primary_text"
+                android:alpha="0.4"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabNewChat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:backgroundTint="@color/brand_color"
+            app:tint="@color/white"
+            android:src="@android:drawable/ic_input_add"
+            android:contentDescription="@string/start_new_chat"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Navigation Drawer (Sidebar) -->
+    <LinearLayout
+        android:id="@+id/sidebarLayout"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="@color/app_background"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- Sidebar Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/brand_color"
+            android:paddingHorizontal="16dp">
+
+            <ImageButton
+                android:id="@+id/btnSidebarBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/menu"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000" />
+
+        <!-- Sidebar Menu Items -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:id="@+id/btnSidebarProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:drawablePadding="16dp"
+                    android:padding="16dp"
+                    app:drawableStartCompat="@drawable/ic_profile"
+                    app:drawableTint="@color/primary_text"
+                    android:background="?attr/selectableItemBackground" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1A000000" android:layout_marginHorizontal="16dp"/>
+
+                <TextView
+                    android:id="@+id/btnSidebarPrivates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privates"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:drawablePadding="16dp"
+                    android:padding="16dp"
+                    app:drawableStartCompat="@drawable/ic_privates"
+                    app:drawableTint="@color/primary_text"
+                    android:background="?attr/selectableItemBackground" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1A000000" android:layout_marginHorizontal="16dp"/>
+
+                <TextView
+                    android:id="@+id/btnSidebarFavorites"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favorites"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:drawablePadding="16dp"
+                    android:padding="16dp"
+                    app:drawableStartCompat="@drawable/ic_favorites"
+                    app:drawableTint="@color/primary_text"
+                    android:background="?attr/selectableItemBackground" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1A000000" android:layout_marginHorizontal="16dp"/>
+
+                <TextView
+                    android:id="@+id/btnSidebarSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings"
+                    android:textSize="18sp"
+                    android:textColor="@color/primary_text"
+                    android:drawablePadding="16dp"
+                    android:padding="16dp"
+                    app:drawableStartCompat="@drawable/ic_settings"
+                    app:drawableTint="@color/primary_text"
+                    android:background="?attr/selectableItemBackground" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1A000000" android:layout_marginHorizontal="16dp"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000" />
+
+        <!-- Sidebar Bottom (Logout) -->
+        <LinearLayout
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/logout_title"
+                android:textSize="18sp"
+                android:textColor="@color/brand_color"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.03"
+                android:shadowColor="@color/secondary_text"
+                android:shadowRadius="6.0"
+                android:shadowDx="0.0"
+                android:shadowDy="0.0"/>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_logout" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabNewChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:backgroundTint="@color/brand_color"
-        app:tint="@color/white"
-        android:src="@android:drawable/ic_input_add"
-        android:contentDescription="@string/start_new_chat"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

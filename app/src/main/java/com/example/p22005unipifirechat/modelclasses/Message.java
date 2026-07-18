@@ -1,6 +1,8 @@
 package com.example.p22005unipifirechat.modelclasses;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
 
     public String senderId;
     public String receiverId;

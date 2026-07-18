@@ -3,7 +3,6 @@
     <!-- Bubble background color -->
     <solid android:color="@color/other_msg_bg" />
 
-    <!-- Professional thick border as shown in the image -->
     <stroke
         android:width="2.5dp"
         android:color="@color/black" />

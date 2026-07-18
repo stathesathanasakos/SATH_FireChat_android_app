@@ -12,8 +12,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,6 +32,7 @@ import com.example.p22005unipifirechat.interfaces.MessageActionResultListener;
 import com.example.p22005unipifirechat.interfaces.UserImageListener;
 import com.example.p22005unipifirechat.adapters.MessageAdapter;
 import com.example.p22005unipifirechat.modelclasses.Message;
+import com.example.p22005unipifirechat.modelclasses.User;
 import com.example.p22005unipifirechat.utils.AiManager;
 import com.example.p22005unipifirechat.utils.AuthManager;
 import com.example.p22005unipifirechat.utils.ChatManager;
@@ -46,6 +51,16 @@ public class ChatActivity extends BaseActivity {
     private MessageAdapter messageAdapter;
     private List<Message> mChat;
     private ChatManager chatManager;
+    private static final String KEY_OPEN_DIALOG = "key_open_dialog";
+    private static final String KEY_DELETE_DIALOG= "key_open_delete_dialog";
+    private static final String KEY_COPY_DIALOG = "key_open_copy_dialog";
+    private static final String KEY_SELECTED_MESSAGE = "key_selected_message";
+    private static final int DIALOG_NONE = 0;
+    private static final int DIALOG_OPTIONS = 1;
+    private static final int DIALOG_COPY = 2;
+    private static final int DIALOG_DELETE = 3;
+    private int currentlyOpenDialog = DIALOG_NONE;  //set currently open dialog to none by default
+    private AlertDialog activeDialog;
     private AuthManager authManager;
     private AiManager aiManager;
     private SmartReplyListener smartReplyListener;
@@ -54,6 +69,8 @@ public class ChatActivity extends BaseActivity {
     private String otherUserId;
     private String otherUsername;
     private String currentUserId;
+    private Message selectedMessage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +83,26 @@ public class ChatActivity extends BaseActivity {
         setupClickListeners();
         setupWindowInsets();
         loadChatContent();
+
+        if (savedInstanceState != null) {
+            currentlyOpenDialog = savedInstanceState.getInt(KEY_OPEN_DIALOG, DIALOG_NONE);
+            selectedMessage = (Message) savedInstanceState.getSerializable(KEY_SELECTED_MESSAGE);
+        }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (activeDialog != null && activeDialog.isShowing()) {
+            outState.putInt(KEY_OPEN_DIALOG, currentlyOpenDialog);
+            if (selectedMessage != null) {
+                outState.putSerializable(KEY_SELECTED_MESSAGE, selectedMessage);
+            }
+        }
+        else {
+            outState.putInt(KEY_OPEN_DIALOG, DIALOG_NONE);
+        }
+    }
     private void initManagers() {
         chatManager = ChatManager.getInstance();
         authManager = AuthManager.getInstance();
@@ -116,8 +151,6 @@ public class ChatActivity extends BaseActivity {
     }
 
 
-
-
     private void handleSendMessage() {
         String msg = etMessage.getText().toString().trim();
         // if the message is not empty chatManager will update the database
@@ -128,7 +161,6 @@ public class ChatActivity extends BaseActivity {
             Toast.makeText(this, R.string.cannot_send_an_empty_message, Toast.LENGTH_SHORT).show();
         }
     }
-
 
 
 
@@ -235,7 +267,6 @@ public class ChatActivity extends BaseActivity {
 
 
 
-
     private void loadChatContent() {
         // get user image from the database to call the adapter
         chatManager.getUserImage(otherUserId, new UserImageListener() {
@@ -267,6 +298,9 @@ public class ChatActivity extends BaseActivity {
         });
     }
 
+
+
+
     private void updateUIWithMessages(List<Message> messages, String imageUrl) {
         mChat.clear();
         mChat.addAll(messages);
@@ -276,12 +310,9 @@ public class ChatActivity extends BaseActivity {
             messageAdapter = new MessageAdapter(ChatActivity.this, mChat, imageUrl, otherUsername, new IMessageActionListener() {
                 @Override
                 public void onMessageLongClick(Message message) {
-                    if (message.senderId.equals(currentUserId)) {
-                        showDeleteConfirmationDialog(message);
-                    } else {
-                        Toast.makeText(ChatActivity.this, R.string.not_allowed_to_delete_messages, Toast.LENGTH_SHORT).show();
-                    }
+                    showOptionsDialog(message);
                 }
+
             });
             recyclerChat.setAdapter(messageAdapter);
         } else {
@@ -289,6 +320,59 @@ public class ChatActivity extends BaseActivity {
         }
 
         scrollToBottom();
+
+        if (currentlyOpenDialog == DIALOG_DELETE && selectedMessage != null) {
+            showDeleteConfirmationDialog(selectedMessage);
+        } else if (currentlyOpenDialog == DIALOG_OPTIONS && selectedMessage != null) {
+            showOptionsDialog(selectedMessage);
+        }
+    }
+
+
+    // custom method to show the Options dialog
+    private void showOptionsDialog(Message message){
+        selectedMessage = message;
+        currentlyOpenDialog = DIALOG_OPTIONS;
+
+        CharSequence[] options;
+        if (message.senderId.equals(currentUserId)) {
+            options = new CharSequence[]{getString(R.string.copy_message), getString(R.string.delete_message)};
+        } else {
+            options = new CharSequence[]{getString(R.string.copy_message)};
+        }
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ChatActivity.this);
+        builder.setTitle(R.string.choices);
+        builder.setItems(options, new android.content.DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(android.content.DialogInterface dialog, int which) {
+                if (which == 0) {
+                    copyToClipboard(selectedMessage.messageText);
+                    currentlyOpenDialog = DIALOG_NONE;
+                    selectedMessage = null;
+                } else if (which == 1 && selectedMessage.senderId.equals(currentUserId)) {
+                    showDeleteConfirmationDialog(selectedMessage);
+                }
+            }
+        });
+
+        builder.setOnCancelListener(dialog -> {
+            currentlyOpenDialog = DIALOG_NONE;
+            selectedMessage = null;
+        });
+
+        activeDialog = builder.show();
+    }
+
+
+    //a helper method to copy the message to the phone's clipboard
+    private void copyToClipboard(String text) {
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+        android.content.ClipData clip = android.content.ClipData.newPlainText("Copied message", text);
+        if (clipboard != null) {
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(ChatActivity.this, R.string.onCopyMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -343,18 +427,45 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void showDeleteConfirmationDialog(Message message) {
-        new AlertDialog.Builder(this)
+        currentlyOpenDialog = DIALOG_DELETE;
+        selectedMessage = message;
+
+        activeDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_message_title)
+                .setMessage(R.string.delete_message_confirmation)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    deleteMessage(message);
+                    currentlyOpenDialog = DIALOG_NONE;
+                    selectedMessage = null;
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> {
+                    currentlyOpenDialog = DIALOG_NONE;
+                    selectedMessage = null;
+                })
+                .setOnCancelListener(dialog -> {
+                    currentlyOpenDialog = DIALOG_NONE;
+                    selectedMessage = null;
+                })
+                .show();
+        /*
+        activeDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_message_title)
                 .setMessage(R.string.delete_message_confirmation)
                 .setPositiveButton(R.string.yes, (dialog, which) -> deleteMessage(message))
                 .setNegativeButton(R.string.no, null)
                 .show();
+        */
     }
 
 
 
     @Override
     protected void onDestroy() {
+        if (activeDialog != null && activeDialog.isShowing()) {
+            activeDialog.dismiss();
+        }
+        activeDialog = null;
+
         super.onDestroy();
         if (messagesListener != null) {
             FirebaseDatabase.getInstance().getReference("Chats").child(currentUserId).removeEventListener(messagesListener);
